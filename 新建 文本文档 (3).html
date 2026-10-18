@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北京时间</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  color: #000;
+  font-family: Arial, "Microsoft YaHei", sans-serif;
+}
+#date {
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+#time {
+  font-size: clamp(48px, 12vw, 120px);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<div id="date"></div>
+<div id="time"></div>
+
+<script>
+const dateFormat = new Intl.DateTimeFormat("zh-CN", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit"
+});
+
+const timeFormat = new Intl.DateTimeFormat("zh-CN", {
+  timeZone: "Asia/Shanghai",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hourCycle: "h23"
+});
+
+function update() {
+  const now = new Date();
+  const parts = Object.fromEntries(
+    dateFormat.formatToParts(now).map(p => [p.type, p.value])
+  );
+
+  document.getElementById("date").textContent =
+    `${parts.year}年${parts.month}月${parts.day}日`;
+
+  document.getElementById("time").textContent =
+    timeFormat.format(now);
+}
+
+update();
+setInterval(update, 100);
+</script>
+</body>
+</html>
